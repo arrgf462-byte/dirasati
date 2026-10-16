@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دراستي | منصتك التعليمية</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --primary:#6257e8;
+  --primary2:#8177ff;
+  --bg:#f5f6fc;
+  --card:#ffffff;
+  --text:#252543;
+  --muted:#8586a3;
+  --border:#ececf6;
+  --soft:#eeedff;
+  --green:#20b887;
+  --shadow:0 8px 30px #302b7110;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:'Cairo',sans-serif;background:var(--bg);
+  color:var(--text);transition:.25s
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+body.dark{
+  --bg:#17182a;--card:#22243a;--text:#f5f5ff;
+  --muted:#a7a8c4;--border:#343650;--soft:#333052;
+  --shadow:0 8px 30px #0002
+}
+.hidden{display:none!important}
+button:focus-visible,input:focus-visible,select:focus-visible{
+  outline:3px solid #b9b4ff;outline-offset:2px
+}
+.login-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px;background:radial-gradient(circle at top right,#e5e3ff,transparent 40%),
+  radial-gradient(circle at bottom left,#d9f8ef,transparent 35%),var(--bg)
+}
+.login-card{
+  width:100%;max-width:430px;background:var(--card);padding:36px;
+  border:1px solid var(--border);border-radius:28px;box-shadow:var(--shadow);
+  text-align:center;animation:rise .5s ease
+}
+.logo{
+  width:65px;height:65px;border-radius:22px;background:var(--soft);
+  display:grid;place-items:center;font-size:35px;margin:0 auto 12px
+}
+.login-card h1{margin:5px 0;font-size:30px}
+.subtitle{color:var(--muted);font-size:14px}
+.field{text-align:right;margin:18px 0}
+.field label{display:block;font-weight:700;font-size:13px;margin-bottom:7px}
+.field input,.field select,.field textarea,.control{
+  width:100%;padding:12px 14px;border:1px solid var(--border);
+  background:var(--bg);color:var(--text);border-radius:12px;outline:none
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--primary)
+}
+.btn{
+  border:0;border-radius:12px;padding:11px 17px;font-weight:800;
+  transition:transform .2s,opacity .2s
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--primary);color:white}
+.btn-soft{background:var(--soft);color:var(--primary)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-danger{background:#ffeded;color:#db4949}
+.full{width:100%}
+.small{font-size:12px;padding:7px 11px}
+.app{min-height:100vh}
+.sidebar{
+  position:fixed;right:0;top:0;bottom:0;width:250px;background:var(--card);
+  border-left:1px solid var(--border);padding:24px 17px;z-index:10;
+  display:flex;flex-direction:column;overflow-y:auto
+}
+.brand{display:flex;align-items:center;gap:11px;padding:0 8px 25px}
+.brand-icon{
+  width:45px;height:45px;background:var(--soft);border-radius:15px;
+  display:grid;place-items:center;font-size:25px
+}
+.brand h2{margin:0;font-size:21px}
+.brand small{color:var(--muted);font-size:11px}
+.nav-title{font-size:11px;color:var(--muted);font-weight:800;padding:12px}
+.nav-btn{
+  width:100%;display:flex;align-items:center;gap:12px;text-align:right;
+  background:transparent;color:var(--muted);border:0;border-radius:13px;
+  padding:12px 13px;margin:3px 0;font-weight:700;transition:.2s
+}
+.nav-btn:hover{background:var(--bg);color:var(--primary)}
+.nav-btn.active{background:var(--soft);color:var(--primary)}
+.nav-icon{width:23px;text-align:center;font-size:19px}
+.sidebar-bottom{margin-top:auto;padding-top:20px}
+.profile-mini{
+  display:flex;align-items:center;gap:10px;padding:12px;
+  background:var(--bg);border-radius:15px
+}
+.avatar{
+  width:39px;height:39px;border-radius:13px;background:#e4e2ff;
+  display:grid;place-items:center;color:#6257e8;font-weight:900
+}
+.profile-mini strong{font-size:13px;display:block}
+.profile-mini small{font-size:11px;color:var(--muted)}
+.main{margin-right:250px;padding:25px 30px 50px;max-width:1600px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:25px}
+.topbar h2{font-size:23px;margin:0}
+.topbar p{color:var(--muted);font-size:13px;margin:3px 0 0}
+.top-actions{display:flex;gap:9px;align-items:center}
+.icon-btn{
+  border:1px solid var(--border);background:var(--card);color:var(--text);
+  width:43px;height:43px;border-radius:13px;font-size:19px
+}
+.mobile-menu{display:none}
+.page{animation:rise .3s ease}
+.hero{
+  border-radius:25px;padding:28px 30px;display:flex;align-items:center;
+  justify-content:space-between;gap:20px;color:white;overflow:hidden;
+  background:linear-gradient(120deg,#6558e8,#8c79ff);position:relative
+}
+.hero:after{
+  content:"";position:absolute;width:250px;height:250px;border:35px solid #ffffff12;
+  border-radius:50%;left:-70px;top:-120px
+}
+.hero-content{position:relative;z-index:1}
+.hero h2{font-size:25px;margin:0 0 8px}
+.hero p{margin:0 0 18px;color:#eeecff;font-size:14px}
+.hero .btn{background:white;color:#6257e8}
+.owl{
+  font-size:86px;position:relative;z-index:1;
+  animation:float 3s ease-in-out infinite;filter:drop-shadow(0 9px 5px #332a6533)
+}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-head{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;margin:27px 0 14px
+}
+.section-head h3{margin:0;font-size:18px}
+.section-head p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-top:20px}
+.stat,.card,.subject-card,.homework-card,.setting-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:19px;box-shadow:var(--shadow)
+}
+.stat{padding:19px}
+.stat-top{display:flex;justify-content:space-between;align-items:center}
+.stat-icon{width:43px;height:43px;border-radius:14px;display:grid;place-items:center;font-size:22px}
+.stat strong{font-size:27px;display:block;margin-top:12px}
+.stat small{color:var(--muted);font-size:12px}
+.content-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+.card{padding:20px}
+.card h3{margin:0 0 14px;font-size:16px}
+.quick-list{display:grid;gap:10px}
+.quick-item{
+  display:flex;align-items:center;gap:12px;padding:12px;border-radius:13px;
+  background:var(--bg);cursor:pointer
+}
+.quick-item:hover{background:var(--soft)}
+.quick-item .qicon{
+  width:42px;height:42px;display:grid;place-items:center;border-radius:13px;font-size:21px
+}
+.quick-item strong{font-size:13px;display:block}
+.quick-item small{color:var(--muted);font-size:11px}
+.quick-item .arrow{margin-right:auto;color:var(--muted)}
+.subject-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.subject-card{padding:18px;transition:.2s;cursor:pointer}
+.subject-card:hover{transform:translateY(-4px);border-color:var(--primary)}
+.subject-icon{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:25px;margin-bottom:13px}
+.subject-card h3{font-size:15px;margin:0 0 5px}
+.subject-card p{color:var(--muted);font-size:12px;margin:0 0 13px}
+.progress{height:7px;background:var(--border);border-radius:20px;overflow:hidden}
+.progress div{height:100%;background:var(--primary);border-radius:20px}
+.progress-label{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:7px}
+.homework-list{display:grid;gap:12px}
+.homework-card{padding:17px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.homework-symbol{width:48px;height:48px;border-radius:15px;background:var(--soft);display:grid;place-items:center;font-size:23px}
+.homework-info{flex:1;min-width:150px}
+.homework-info h3{margin:0;font-size:14px}
+.homework-info p{margin:5px 0 0;font-size:12px;color:var(--muted)}
+.homework-actions{display:flex;gap:7px;flex-wrap:wrap}
+.pill{display:inline-block;padding:4px 9px;border-radius:8px;font-size:11px;font-weight:800}
+.pill-green{background:#d9f8ed;color:#148661}
+.pill-orange{background:#fff0d8;color:#b87919}
+.pill-purple{background:var(--soft);color:var(--primary)}
+.chat-wrap{height:min(65vh,600px);min-height:400px;display:flex;flex-direction:column}
+.chat-head{display:flex;align-items:center;gap:12px;padding-bottom:15px;border-bottom:1px solid var(--border)}
+.teacher-avatar{width:46px;height:46px;border-radius:16px;background:#dff8ed;display:grid;place-items:center;font-size:25px}
+.chat-head h3{margin:0;font-size:15px}
+.chat-head p{margin:3px 0 0;color:var(--green);font-size:11px}
+.chat-messages{flex:1;overflow-y:auto;padding:17px 0;display:flex;flex-direction:column;gap:12px}
+.message{max-width:85%;padding:12px 15px;border-radius:15px;font-size:13px;line-height:1.9;white-space:pre-wrap}
+.message.bot{background:var(--bg);align-self:flex-start;border-bottom-right-radius:4px}
+.message.user{background:var(--primary);color:white;align-self:flex-end;border-bottom-left-radius:4px}
+.chat-input{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border)}
+.chat-input input{flex:1;min-width:0;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:13px;padding:12px}
+.chat-note{font-size:11px;color:var(--muted);margin:10px 0 0}
+.exam-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.exam-preview{background:linear-gradient(145deg,#6558e8,#8c79ff);color:white;border-radius:20px;padding:23px}
+.exam-preview h3{margin:0 0 8px}
+.exam-preview p{color:#efedff;font-size:13px}
+.exam-numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px}
+.exam-numbers div{background:#ffffff20;border-radius:13px;padding:13px 8px;text-align:center}
+.exam-numbers strong{display:block;font-size:22px}
+.exam-numbers small{font-size:11px;color:#eeeaff}
+.empty{padding:35px 15px;text-align:center;color:var(--muted)}
+.empty div{font-size:42px;margin-bottom:10px}
+.schedule-list{display:grid;gap:10px}
+.schedule-item{display:flex;align-items:center;gap:14px;background:var(--bg);padding:13px;border-radius:13px}
+.schedule-time{min-width:82px;text-align:center;color:var(--primary);font-weight:800;font-size:13px}
+.schedule-item strong{font-size:13px}
+.schedule-item small{display:block;color:var(--muted);font-size:11px}
+.settings-list{display:grid;gap:12px}
+.setting-row{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:17px;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:0}
+.setting-row strong{font-size:14px;display:block}
+.setting-row small{font-size:12px;color:var(--muted)}
+.switch{width:48px;height:27px;border:0;border-radius:20px;background:#ccc;position:relative}
+.switch:after{content:"";position:absolute;width:21px;height:21px;background:white;border-radius:50%;right:3px;top:3px;transition:.2s}
+.switch.on{background:var(--primary)}
+.switch.on:after{right:24px}
+.toast{
+  position:fixed;bottom:22px;left:22px;background:#252543;color:white;
+  padding:13px 19px;border-radius:13px;z-index:99;box-shadow:var(--shadow);
+  animation:rise .2s ease;font-size:13px
+}
+.modal-backdrop{position:fixed;inset:0;background:#17172b88;display:grid;place-items:center;padding:20px;z-index:50}
+.modal{width:100%;max-width:460px;background:var(--card);color:var(--text);padding:24px;border-radius:22px;box-shadow:var(--shadow)}
+.modal h3{margin:0 0 15px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-start;margin-top:18px}
+footer{text-align:center;padding:30px;color:var(--muted);font-size:11px}
+@media(max-width:1050px){
+  .sidebar{width:220px}.main{margin-right:220px;padding:22px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  .sidebar{transform:translateX(100%);transition:.25s;width:260px;box-shadow:var(--shadow)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-right:0;padding:17px}
+  .mobile-menu{display:grid;place-items:center}
+  .topbar h2{font-size:19px}.topbar p{font-size:11px}
+  .hero{padding:22px}.hero h2{font-size:21px}.owl{font-size:65px}
+  .stats{gap:10px}.stat{padding:14px}.stat strong{font-size:23px}
+  .content-grid,.exam-grid{grid-template-columns:1fr}
+  .subject-grid{gap:10px}.subject-card{padding:14px}
+  .top-actions .icon-btn{width:39px;height:39px}
+  .form-grid{grid-template-columns:1fr}
+  .homework-actions{width:100%}.homework-actions button{flex:1}
+}
+@media(max-width:390px){
+  .hero .owl{font-size:50px}.hero{padding:17px}
+  .hero h2{font-size:18px}.hero p{font-size:12px}
+  .stats{grid-template-columns:1fr 1fr}
+  .subject-card h3{font-size:13px}
+  .login-card{padding:25px 20px}
+}
+</style>
+</head>
+<body>
+
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="logo">🦉</div>
+    <h1>دراستي</h1>
+    <p class="subtitle">رحلتك نحو النجاح تبدأ من هنا ✨</p>
+    <form id="loginForm">
+      <div class="field">
+        <label for="studentName">اسم الطالب</label>
+        <input id="studentName" placeholder="اكتب اسمك هنا" required maxlength="35">
+      </div>
+      <div class="field">
+        <label for="studentGrade">الصف الدراسي</label>
+        <select id="studentGrade">
+          <option>الصف السابع</option>
+          <option selected>الصف الثامن</option>
+          <option>الصف التاسع</option>
+          <option>الصف العاشر</option>
+          <option>الأول الثانوي</option>
+          <option>الثاني الثانوي</option>
+        </select>
+      </div>
+      <button class="btn btn-primary full" type="submit">ابدأ رحلتك التعليمية ←</button>
+    </form>
+    <p class="subtitle" style="margin-top:20px">📚 تعلّم • تدرب • تفوّق</p>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+  <aside id="sidebar" class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">🦉</div>
+      <div><h2>دراستي</h2><small>منصتك التعليمية الذكية</small></div>
+    </div>
+    <div class="nav-title">القائمة الرئيسية</div>
+    <button class="nav-btn active" data-page="home"><span class="nav-icon">⌂</span>الرئيسية</button>
+    <button class="nav-btn" data-page="subjects"><span class="nav-icon">📚</span>المواد الدراسية</button>
+    <button class="nav-btn" data-page="teacher"><span class="nav-icon">🤖</span>المعلّم الذكي</button>
+    <button class="nav-btn" data-page="homework"><span class="nav-icon">📝</span>الواجبات</button>
+    <button class="nav-btn" data-page="exams"><span class="nav-icon">📋</span>الاختبارات</button>
+    <button class="nav-btn" data-page="schedule"><span class="nav-icon">📅</span>الجدول الدراسي</button>
+    <div class="nav-title">حسابك</div>
+    <button class="nav-btn" data-page="settings"><span class="nav-icon">⚙️</span>الإعدادات</button>
+    <div class="sidebar-bottom">
+      <div class="profile-mini">
+        <div class="avatar" id="profileAvatar">م</div>
+        <div style="min-width:0"><strong id="profileName">الطالب</strong><small id="profileGrade">الصف الثامن</small></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:11px">
+        <button id="menuButton" class="icon-btn mobile-menu" aria-label="فتح القائمة">☰</button>
+        <div><h2 id="pageTitle">الرئيسية</h2><p id="pageSubtitle">أهلًا بك في منصتك التعليمية</p></div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="themeButton" title="تغيير المظهر">🌙</button>
+        <button class="icon-btn" id="quickTeacher" title="اسأل المعلّم">💬</button>
+      </div>
+    </header>
+
+    <section id="page-home" class="page">
+      <div class="hero">
+        <div class="hero-content">
+          <p style="margin:0 0 8px">✨ يوم جديد وفرصة جديدة</p>
+          <h2>أهلًا <span id="welcomeName">بطل</span>! 👋</h2>
+          <p>جاهز تتعلّم شيئًا جديدًا اليوم؟<br>كل خطوة صغيرة تقرّبك من هدفك.</p>
+          <button class="btn" data-goto="subjects">استكشف المواد ←</button>
+        </div>
+        <div class="owl">🦉</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="stat-top"><span class="subtitle">المواد الدراسية</span><span class="stat-icon" style="background:#eeedff">📚</span></div><strong id="statSubjects">11</strong><small>مواد للتعلّم والمراجعة</small></div>
+        <div class="stat"><div class="stat-top"><span class="subtitle">الواجبات المكتملة</span><span class="stat-icon" style="background:#dff8ed">✅</span></div><strong id="statDone">0</strong><small>أحسنت، استمر!</small></div>
+        <div class="stat"><div class="stat-top"><span class="subtitle">الواجبات المتبقية</span><span class="stat-icon" style="background:#fff0d8">📝</span></div><strong id="statPending">2</strong><small>رتّب وقتك لإنجازها</small></div>
+        <div class="stat"><div class="stat-top"><span class="subtitle">خطتك الدراسية</span><span class="stat-icon" style="background:#e1f1ff">🎯</span></div><strong id="statSchedule">0</strong><small>حصص أضفتها لجدولك</small></div>
+      </div>
+
+      <div class="content-grid">
+        <div>
+          <div class="section-head"><div><h3>⚡ وصول سريع</h3><p>ابدأ من المكان الذي تحتاجه</p></div></div>
+          <div class="card quick-list">
+            <div class="quick-item" data-goto="teacher"><div class="qicon" style="background:#e1f1ff">🤖</div><div><strong>اسأل المعلّم الذكي</strong><small>اطلب شرحًا أو مثالًا</small></div><span class="arrow">←</span></div>
+            <div class="quick-item" data-goto="exams"><div class="qicon" style="background:#eeedff">📝</div><div><strong>جهّز اختبارك</strong><small>اختر المادة والمدة والصعوبة</small></div><span class="arrow">←</span></div>
+            <div class="quick-item" data-goto="homework"><div class="qicon" style="background:#dff8ed">📒</div><div><strong>راجع واجباتك</strong><small>تابع ما أنجزته وما تبقّى</small></div><span class="arrow">←</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="section-head"><div><h3>📌 واجباتك</h3><p>لا تنسَ إكمال مهامك</p></div><button class="btn btn-soft small" data-goto="homework">عرض الكل</button></div>
+          <div class="card" id="homeHomework"></div>
+        </div>
+      </div>
+      <div class="section-head"><div><h3>📚 موادك الدراسية</h3><p>اضغط على المادة لعرض معلوماتها</p></div><button class="btn btn-soft small" data-goto="subjects">كل المواد</button></div>
+      <div id="homeSubjects" class="subject-grid"></div>
+    </section>
+
+    <section id="page-subjects" class="page hidden">
+      <div class="section-head" style="margin-top:0"><div><h3>موادك الدراسية</h3><p>اختر المادة التي تريد دراستها</p></div></div>
+      <div id="allSubjects" class="subject-grid"></div>
+    </section>
+
+    <section id="page-teacher" class="page hidden">
+      <div class="card chat-wrap">
+        <div class="chat-head"><div class="teacher-avatar">🤖</div><div><h3>المعلّم الذكي</h3><p>● جاهز لمساعدتك</p></div><span class="pill pill-purple" style="margin-right:auto">مساعد دراسي</span></div>
+        <div id="chatMessages" class="chat-messages">
+          <div class="message bot">أهلًا بك! 👋 أنا معلّمك في منصة دراستي.\nاسألني عن درس أو مفهوم دراسي، وسأحاول مساعدتك بمثال وإجابة واضحة.</div>
+        </div>
+        <form id="chatForm" class="chat-input">
+          <input id="chatInput" placeholder="اكتب سؤالك هنا..." maxlength="1000" autocomplete="off" required>
+          <button class="btn btn-primary" type="submit">إرسال ➤</button>
+        </form>
+        <p class="chat-note">ملاحظة: هذه نسخة تجريبية؛ الإجابات هنا محدودة وليست متصلة بخدمة ذكاء اصطناعي فعلية.</p>
+      </div>
+    </section>
+
+    <section id="page-homework" class="page hidden">
+      <div class="section-head" style="margin-top:0"><div><h3>📒 تنظيم الواجبات</h3><p>أضف واجباتك وتابع إنجازها</p></div><button id="addHomeworkButton" class="btn btn-primary">＋ إضافة واجب</button></div>
+      <div id="homeworkList" class="homework-list"></div>
+    </section>
+
+    <section id="page-exams" class="page hidden">
+      <div class="section-head" style="margin-top:0"><div><h3>📝 إعداد الاختبار</h3><p>خصّص اختبارًا يناسب خطتك الدراسية</p></div></div>
+      <div class="exam-grid">
+        <div class="card">
+          <h3>⚙️ خيارات الاختبار</h3>
+          <form id="examForm">
+            <div class="form-grid">
+              <div class="field"><label for="examSubject">المادة</label><select id="examSubject"></select></div>
+              <div class="field"><label for="examLesson">اسم الدرس</label><input id="examLesson" placeholder="مثال: الكسور" required maxlength="70"></div>
+              <div class="field"><label for="examCount">عدد الأسئلة</label><select id="examCount"><option value="5">5 أسئلة</option><option value="10" selected>10 أسئلة</option><option value="15">15 سؤالًا</option><option value="20">20 سؤالًا</option><option value="30">30 سؤالًا</option></select></div>
+              <div class="field"><label for="examDuration">مدة الاختبار</label><select id="examDuration"><option value="10">10 دقائق</option><option value="15">15 دقيقة</option><option value="20" selected>20 دقيقة</option><option value="30">30 دقيقة</option><option value="45">45 دقيقة</option><option value="60">60 دقيقة</option></select></div>
+              <div class="field" style="grid-column:1/-1"><label for="examDifficulty">مستوى الصعوبة</label><select id="examDifficulty"><option>سهل</option><option selected>متوسط</option><option>صعب</option></select></div>
+            </div>
+            <button class="btn btn-primary full" type="submit">حفظ إعدادات الاختبار ✓</button>
+          </form>
+        </div>
+        <div class="exam-preview">
+          <div style="font-size:34px">🎯</div><h3>اختبارك على مقاسك</h3>
+          <p>راجع الدرس، واضبط عدد الأسئلة والوقت ومستوى الصعوبة قبل أن تبدأ.</p>
+          <div class="exam-numbers"><div><strong id="previewCount">10</strong><small>سؤال</small></div><div><strong id="previewDuration">20</strong><small>دقيقة</small></div><div><strong id="previewDifficulty">متوسط</strong><small>الصعوبة</small></div></div>
+          <p id="examSaved" style="margin-top:18px">لم تحفظ إعدادات بعد.</p>
+          <button id="showExamSettings" class="btn" style="background:white;color:#6257e8;width:100%">عرض إعداداتي</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:18px"><h3>📌 قبل البدء</h3><p style="color:var(--muted);font-size:13px;line-height:2">هذه النسخة تحفظ إعدادات الاختبار فقط، ولا تنشئ أسئلة حقيقية بعد. سنضيف إنشاء الأسئلة والتصحيح لاحقًا.</p></div>
+    </section>
+
+    <section id="page-schedule" class="page hidden">
+      <div class="section-head" style="margin-top:0"><div><h3>📅 الجدول الدراسي</h3><p>نظّم حصصك ومواعيد المذاكرة</p></div><button id="addScheduleButton" class="btn btn-primary">＋ إضافة حصة</button></div>
+      <div class="card"><div id="scheduleList" class="schedule-list"></div></div>
+    </section>
+
+    <section id="page-settings" class="page hidden">
+      <div class="section-head" style="margin-top:0"><div><h3>⚙️ الإعدادات</h3><p>خصّص تجربتك في دراستي</p></div></div>
+      <div class="card settings-list">
+        <div class="setting-row"><div><strong>🌙 المظهر الداكن</strong><small>غيّر بين الوضع الفاتح والداكن</small></div><button id="darkSwitch" class="switch" aria-label="تبديل المظهر"></button></div>
+        <div class="setting-row"><div><strong>👤 بيانات الطالب</strong><small id="settingsStudent">الصف الثامن</small></div><button id="editProfile" class="btn btn-soft small">تعديل البيانات</button></div>
+        <div class="setting-row"><div><strong>🐞 الإبلاغ عن مشكلة</strong><small>أخبرنا عن مشكلة واجهتك في الموقع</small></div><button id="reportButton" class="btn btn-outline small">إرسال بلاغ</button></div>
+        <div class="setting-row"><div><strong>🚪 تسجيل الخروج</strong><small>العودة إلى شاشة تسجيل الدخول</small></div><button id="logoutButton" class="btn btn-danger small">تسجيل الخروج</button></div>
+      </div>
+      <p class="subtitle" style="margin-top:18px">دراستي — إصدار تجريبي للتصميم</p>
+    </section>
+    <footer>صُنع بحب 💜 من أجل رحلة تعليمية أفضل — دراستي</footer>
+  </main>
+</div>
+
+<div id="modalBackdrop" class="modal-backdrop hidden">
+  <div id="modalContent" class="modal"></div>
+</div>
+<div id="toast" class="toast hidden" role="status"></div>
+
+<script>
+const subjects = [
+  {name:"اللغة العربية",icon:"📖",color:"#eeedff",desc:"القراءة والقواعد والتعبير",progress:65},
+  {name:"اللغة الإنجليزية",icon:"🔤",color:"#e1f1ff",desc:"الكلمات والقواعد والمحادثة",progress:50},
+  {name:"الرياضيات",icon:"➗",color:"#fff0d8",desc:"الأعداد والمعادلات والهندسة",progress:70},
+  {name:"العلوم",icon:"🔬",color:"#dff8ed",desc:"اكتشف العالم من حولك",progress:40},
+  {name:"التربية الإسلامية",icon:"🌙",color:"#e4f7e9",desc:"الدروس والقيم الإسلامية",progress:60},
+  {name:"الدراسات الاجتماعية",icon:"🌍",color:"#ffe7ed",desc:"التاريخ والجغرافيا",progress:45},
+  {name:"الحاسوب",icon:"💻",color:"#e1f1ff",desc:"التكنولوجيا والمهارات الرقمية",progress:55},
+  {name:"التربية المهنية",icon:"🧰",color:"#fff0d8",desc:"مهارات الحياة والعمل",progress:35},
+  {name:"التربية الفنية",icon:"🎨",color:"#ffe7ed",desc:"الفن والإبداع",progress:80},
+  {name:"التربية الرياضية",icon:"⚽",color:"#dff8ed",desc:"الرياضة والصحة",progress:75},
+  {name:"الثقافة المالية",icon:"💰",color:"#eeedff",desc:"الادخار وإدارة المال",progress:30}
+];
+
+let studentName = "الطالب";
+let studentGrade = "الصف الثامن";
+let currentPage = "home";
+let darkMode = false;
+let lastToast;
+let toastTimer;
+let homework = [
+  {id:1,title:"حل أسئلة الرياضيات",subject:"الرياضيات",due:"غدًا",done:false},
+  {id:2,title:"مراجعة درس العلوم",subject:"العلوم",due:"بعد يومين",done:false}
+];
+let schedule = [];
+let examSettings = null;
+let nextId = 3;
+
+const $ = id => document.getElementById(id);
+const escapeHTML = value => String(value).replace(/[&<>"']/g, ch => ({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[ch]));
+
+function toast(message){
+  $("toast").textContent = message;
+  $("toast").classList.remove("hidden");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>$("toast").classList.add("hidden"),2600);
+}
+
+function navigate(page){
+  currentPage = page;
+  document.querySelectorAll(".page").forEach(el=>el.classList.add("hidden"));
+  const target = $("page-"+page);
+  if(target) target.classList.remove("hidden");
+  document.querySelectorAll(".nav-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.page===page));
+  const titles = {
+    home:["الرئيسية","أهلًا بك في منصتك التعليمية"],
+    subjects:["المواد الدراسية","تعلّم شيئًا جديدًا كل يوم"],
+    teacher:["المعلّم الذكي","اسأل عن دروسك واحصل على مساعدة"],
+    homework:["الواجبات","نظّم مهامك وتابع إنجازك"],
+    exams:["الاختبارات","جهّز اختبارك حسب احتياجاتك"],
+    schedule:["الجدول الدراسي","خطّط لوقتك بذكاء"],
+    settings:["الإعدادات","تحكّم بتجربتك في دراستي"]
+  };
+  $("pageTitle").textContent = titles[page][0];
+  $("pageSubtitle").textContent = titles[page][1];
+  $("sidebar").classList.remove("open");
+  if(page==="home") renderHome();
+  if(page==="subjects") renderSubjects("allSubjects");
+  if(page==="homework") renderHomework();
+  if(page==="schedule") renderSchedule();
+  if(page==="settings") updateSettings();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function subjectCard(s){
+  return `<div class="subject-card" data-subject="${escapeHTML(s.name)}">
+    <div class="subject-icon" style="background:${s.color}">${s.icon}</div>
+    <h3>${escapeHTML(s.name)}</h3><p>${escapeHTML(s.desc)}</p>
+    <div class="progress"><div style="width:${s.progress}%"></div></div>
+    <div class="progress-label"><span>التقدّم التجريبي</span><strong>${s.progress}%</strong></div>
+  </div>`;
+}
+
+function renderSubjects(id){
+  $(id).innerHTML = subjects.map(subjectCard).join("");
+}
+
+function renderHome(){
+  $("statSubjects").textContent = subjects.length;
+  $("statDone").textContent = homework.filter(h=>h.done).length;
+  $("statPending").textContent = homework.filter(h=>!h.done).length;
+  $("statSchedule").textContent = schedule.length;
+  $("homeSubjects").innerHTML = subjects.slice(0,6).map(subjectCard).join("");
+  const pending = homework.filter(h=>!h.done).slice(0,3);
+  $("homeHomework").innerHTML = pending.length ? `<div class="quick-list">${pending.map(h=>`
+    <div class="quick-item"><div class="qicon" style="background:#eeedff">📝</div>
+    <div><strong>${escapeHTML(h.title)}</strong><small>${escapeHTML(h.subject)} • ${escapeHTML(h.due)}</small></div>
+    <span class="arrow">←</span></div>`).join("")}</div>` : `<div class="empty"><div>🎉</div>رائع! أنهيت كل واجباتك.</div>`;
+}
+
+function renderHomework(){
+  $("homeworkList").innerHTML = homework.length ? homework.map(h=>`
+    <div class="homework-card">
+      <div class="homework-symbol">${h.done?"✅":"📝"}</div>
+      <div class="homework-info"><h3>${escapeHTML(h.title)}</h3>
+        <p>${escapeHTML(h.subject)} • الموعد: ${escapeHTML(h.due)}</p>
+        <span class="pill ${h.done?"pill-green":"pill-orange"}">${h.done?"مكتمل":"قيد الإنجاز"}</span>
+      </div>
+      <div class="homework-actions">
+        <button class="btn btn-soft small" data-ask-homework="${h.id}">💬 اسأل المعلّم</button>
+        <button class="btn btn-outline small" data-toggle-homework="${h.id}">${h.done?"إلغاء الإنجاز":"✓ تم الإنجاز"}</button>
+        <button class="btn btn-danger small" data-delete-homework="${h.id}" aria-label="حذف الواجب">حذف</button>
+      </div>
+    </div>`).join("") : `<div class="card empty"><div>📚</div><strong>لا توجد واجبات بعد</strong><p>أضف أول واجب لك وابدأ التنظيم.</p></div>`;
+}
+
+function renderSchedule(){
+  $("scheduleList").innerHTML = schedule.length ? schedule.slice().sort((a,b)=>a.time.localeCompare(b.time)).map(s=>`
+    <div class="schedule-item"><div class="schedule-time">${escapeHTML(s.time)}</div>
+    <div style="flex:1"><strong>${escapeHTML(s.title)}</strong><small>${escapeHTML(s.day)} • ${escapeHTML(s.subject)}</small></div>
+    <button class="btn btn-danger small" data-delete-schedule="${s.id}">حذف</button></div>`).join("") : `<div class="empty"><div>📅</div><strong>جدولك فارغ حاليًا</strong><p>اضغط «إضافة حصة» لتنظيم وقتك.</p></div>`;
+}
+
+function toggleTheme(){
+  darkMode = !darkMode;
+  document.body.classList.toggle("dark",darkMode);
+  $("themeButton").textContent = darkMode ? "☀️" : "🌙";
+  updateSettings();
+}
+
+function updateSettings(){
+  $("darkSwitch").classList.toggle("on",darkMode);
+  $("settingsStudent").textContent = studentName+" • "+studentGrade;
+}
+
+function showModal(content){
+  $("modalContent").innerHTML = content;
+  $("modalBackdrop").classList.remove("hidden");
+}
+function closeModal(){
+  $("modalBackdrop").classList.add("hidden");
+}
+function openHomeworkModal(){
+  showModal(`<h3>＋ إضافة واجب جديد</h3>
+    <form id="newHomeworkForm">
+      <div class="field"><label for="newHomeworkTitle">اسم الواجب</label><input id="newHomeworkTitle" required maxlength="90" placeholder="مثال: حل أسئلة الوحدة"></div>
+      <div class="field"><label for="newHomeworkSubject">المادة</label><select id="newHomeworkSubject">${subjects.map(s=>`<option>${escapeHTML(s.name)}</option>`).join("")}</select></div>
+      <div class="field"><label for="newHomeworkDue">موعد التسليم</label><input id="newHomeworkDue" required maxlength="40" placeholder="مثال: يوم الخميس"></div>
+      <div class="modal-actions"><button class="btn btn-primary" type="submit">إضافة الواجب</button><button class="btn btn-outline" type="button" data-close-modal>إلغاء</button></div>
+    </form>`);
+}
+
+function openScheduleModal(){
+  showModal(`<h3>＋ إضافة حصة دراسية</h3>
+    <form id="newScheduleForm">
+      <div class="field"><label for="newScheduleTitle">عنوان الحصة</label><input id="newScheduleTitle" required maxlength="70" placeholder="مثال: مراجعة الوحدة الأولى"></div>
+      <div class="field"><label for="newScheduleSubject">المادة</label><select id="newScheduleSubject">${subjects.map(s=>`<option>${escapeHTML(s.name)}</option>`).join("")}</select></div>
+      <div class="field"><label for="newScheduleDay">اليوم</label><select id="newScheduleDay">${["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"].map(d=>`<option>${d}</option>`).join("")}</select></div>
+      <div class="field"><label for="newScheduleTime">الوقت</label><input id="newScheduleTime" type="time" required value="16:00"></div>
+      <div class="modal-actions"><button class="btn btn-primary" type="submit">إضافة الحصة</button><button class="btn btn-outline" type="button" data-close-modal>إلغاء</button></div>
+    </form>`);
+}
+
+function openProfileModal(){
+  showModal(`<h3>👤 تعديل بيانات الطالب</h3>
+    <form id="profileForm">
+      <div class="field"><label for="editName">اسم الطالب</label><input id="editName" maxlength="35" required value="${escapeHTML(studentName)}"></div>
+      <div class="field"><label for="editGrade">الصف الدراسي</label><select id="editGrade">${["الصف السابع","الصف الثامن","الصف التاسع","الصف العاشر","الأول الثانوي","الثاني الثانوي"].map(g=>`<option ${g===studentGrade?"selected":""}>${g}</option>`).join("")}</select></div>
+      <div class="modal-actions"><button class="btn btn-primary" type="submit">حفظ التعديلات</button><button class="btn btn-outline" type="button" data-close-modal>إلغاء</button></div>
+    </form>`);
+}
+
+function openReportModal(){
+  showModal(`<h3>🐞 الإبلاغ عن مشكلة</h3>
+    <form id="reportForm">
+      <div class="field"><label for="reportType">نوع المشكلة</label><select id="reportType"><option>مشكلة في التصميم</option><option>زر لا يعمل</option><option>مشكلة في الواجبات</option><option>مشكلة أخرى</option></select></div>
+      <div class="field"><label for="reportDetails">اشرح المشكلة</label><textarea id="reportDetails" rows="4" maxlength="700" required placeholder="اكتب ما حدث..."></textarea></div>
+      <div class="modal-actions"><button class="btn btn-primary" type="submit">إرسال البلاغ</button><button class="btn btn-outline" type="button" data-close-modal>إلغاء</button></div>
+    </form>`);
+}
+
+function addMessage(text,type){
+  const el=document.createElement("div");
+  el.className="message "+type;
+  el.textContent=text;
+  $("chatMessages").appendChild(el);
+  $("chatMessages").scrollTop=$("chatMessages").scrollHeight;
+}
+
+function answerTeacher(question){
+  const q=question.toLowerCase();
+  if(q.includes("مرحبا")||q.includes("السلام")||q.includes("هلا"))
+    return "أهلًا وسهلًا فيك! 😊 اكتب اسم الدرس أو السؤال الذي تريد فهمه.";
+  if(q.includes("رياضيات")||q.includes("الرياضيات")||q.includes("كسور"))
+    return "مثال في الرياضيات:\nإذا كان لدينا 1/2 + 1/4، نوحّد المقام ليصبح 4:\n1/2 = 2/4\nإذن 2/4 + 1/4 = 3/4.\n\nالإجابة: 3/4.\nاكتب سؤالك المحدد لأساعدك أكثر.";
+  if(q.includes("علوم")||q.includes("الخلية"))
+    return "مثال في العلوم:\nالخلية هي وحدة البناء الأساسية في الكائن الحي.\nالنواة تنظّم أنشطة الخلية، والغشاء ينظّم دخول المواد وخروجها.\n\nالإجابة المختصرة: الخلية هي الوحدة الأساسية لبناء أجسام الكائنات الحية.";
+  if(q.includes("انجليزي")||q.includes("إنجليزي")||q.includes("english"))
+    return "مثال باللغة الإنجليزية:\nI enjoy reading.\nالمعنى: أنا أستمتع بالقراءة.\nبعد enjoy نستخدم الفعل مع ing، مثل reading أو playing.";
+  if(q.includes("عربي")||q.includes("اللغة العربية"))
+    return "مثال في اللغة العربية:\nالجملة الاسمية تبدأ باسم، وتتكوّن غالبًا من مبتدأ وخبر.\nمثال: الطالبُ مجتهدٌ.\nالطالبُ: مبتدأ مرفوع، ومجتهدٌ: خبر مرفوع.";
+  if(q.includes("واجب")||q.includes("حل"))
+    return "أكيد! 😊 أرسل نص السؤال كاملًا أو صورة واضحة له، وسأساعدك في فهم المطلوب وكتابة الإجابة مع مثال إذا احتجت.";
+  return "وصلني سؤالك! 💜\nلكن الإجابات في هذه النسخة تجريبية ومحدودة، ولم يتم ربط المعلّم بخدمة ذكاء اصطناعي حقيقية بعد.\n\nاكتب سؤالًا عن الرياضيات أو العلوم أو اللغة العربية أو الإنجليزية، أو أرسل السؤال كاملًا لنجهّز له الإجابة المناسبة لاحقًا.";
+}
+
+$("loginForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  studentName=$("studentName").value.trim();
+  studentGrade=$("studentGrade").value;
+  if(!studentName) return;
+  $("welcomeName").textContent=studentName;
+  $("profileName").textContent=studentName;
+  $("profileAvatar").textContent=studentName.charAt(0);
+  $("profileGrade").textContent=studentGrade;
+  $("loginScreen").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  renderHome();
+  toast("أهلًا "+studentName+"! سعيدون بوجودك 💜");
+});
+
+document.addEventListener("click",e=>{
+  const nav=e.target.closest("[data-page]");
+  if(nav){navigate(nav.dataset.page);return}
+  const goto=e.target.closest("[data-goto]");
+  if(goto){navigate(goto.dataset.goto);return}
+  const subject=e.target.closest("[data-subject]");
+  if(subject){
+    const s=subjects.find(x=>x.name===subject.dataset.subject);
+    if(s){
+      showModal(`<h3>${s.icon} ${escapeHTML(s.name)}</h3><p style="line-height:2;color:var(--muted)">${escapeHTML(s.desc)}</p><div class="progress"><div style="width:${s.progress}%"></div></div><p class="subtitle">التقدّم التجريبي: ${s.progress}%</p><div class="modal-actions"><button class="btn btn-primary" data-ask-subject="${escapeHTML(s.name)}">اسأل المعلّم عن المادة</button><button class="btn btn-outline" data-close-modal>إغلاق</button></div>`);
+    }
+    return;
+  }
+  if(e.target.closest("[data-close-modal]")){closeModal();return}
+  const ask=e.target.closest("[data-ask-homework]");
+  if(ask){
+    const h=homework.find(x=>x.id===Number(ask.dataset.askHomework));
+    if(h){
+      closeModal();navigate("teacher");
+      $("chatInput").value="ساعدني في واجب "+h.subject+": "+h.title+"، وأعطني الإجابة مع مثال.";
+      $("chatInput").focus();
+    }
+    return;
+  }
+  const askSubject=e.target.closest("[data-ask-subject]");
+  if(askSubject){
+    const name=askSubject.dataset.askSubject;
+    closeModal();navigate("teacher");
+    $("chatInput").value="ساعدني في مادة "+name+"، وأعطني مثالًا وإجابة واضحة.";
+    $("chatInput").focus();return;
+  }
+  const toggle=e.target.closest("[data-toggle-homework]");
+  if(toggle){
+    const h=homework.find(x=>x.id===Number(toggle.dataset.toggleHomework));
+    if(h){h.done=!h.done;renderHomework();renderHome();toast(h.done?"أحسنت! تم إنجاز الواجب 🎉":"تم تحديث حالة الواجب");}
+    return;
+  }
+  const del=e.target.closest("[data-delete-homework]");
+  if(del){
+    homework=homework.filter(h=>h.id!==Number(del.dataset.deleteHomework));
+    renderHomework();renderHome();toast("تم حذف الواجب");return;
+  }
+  const delSchedule=e.target.closest("[data-delete-schedule]");
+  if(delSchedule){
+    schedule=schedule.filter(s=>s.id!==Number(delSchedule.dataset.deleteSchedule));
+    renderSchedule();renderHome();toast("تم حذف الحصة");return;
+  }
+  const askButton=e.target.closest("#quickTeacher");
+  if(askButton){navigate("teacher");$("chatInput").focus();return}
+  const askShow=e.target.closest("#showExamSettings");
+  if(askShow){
+    toast(examSettings?`المادة: ${examSettings.subject} • الدرس: ${examSettings.lesson}`:"احفظ إعدادات الاختبار أولًا");
+  }
+});
+
+$("menuButton").addEventListener("click",()=>$("sidebar").classList.toggle("open"));
+$("themeButton").addEventListener("click",toggleTheme);
+$("darkSwitch").addEventListener("click",toggleTheme);
+$("addHomeworkButton").addEventListener("click",openHomeworkModal);
+$("addScheduleButton").addEventListener("click",openScheduleModal);
+$("editProfile").addEventListener("click",openProfileModal);
+$("reportButton").addEventListener("click",openReportModal);
+
+$("chatForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const question=$("chatInput").value.trim();
+  if(!question)return;
+  addMessage(question,"user");
+  $("chatInput").value="";
+  addMessage(answerTeacher(question),"bot");
+});
+
+$("examForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  examSettings={
+    subject:$("examSubject").value,
+    lesson:$("examLesson").value.trim(),
+    count:$("examCount").value,
+    duration:$("examDuration").value,
+    difficulty:$("examDifficulty").value
+  };
+  $("previewCount").textContent=examSettings.count;
+  $("previewDuration").textContent=examSettings.duration;
+  $("previewDifficulty").textContent=examSettings.difficulty;
+  $("examSaved").textContent="تم حفظ الإعدادات التجريبية بنجاح ✓";
+  toast("تم حفظ إعدادات الاختبار");
+});
+
+$("examSubject").innerHTML=subjects.map(s=>`<option>${escapeHTML(s.name)}</option>`).join("");
+
+$("modalContent").addEventListener("submit",e=>{
+  e.preventDefault();
+  const form=e.target;
+  if(form.id==="newHomeworkForm"){
+    homework.push({
+      id:nextId++,
+      title:$("newHomeworkTitle").value.trim(),
+      subject:$("newHomeworkSubject").value,
+      due:$("newHomeworkDue").value.trim(),
+      done:false
+    });
+    closeModal();renderHomework();renderHome();toast("تمت إضافة الواجب بنجاح");
+  }
+  if(form.id==="newScheduleForm"){
+    schedule.push({
+      id:nextId++,
+      title:$("newScheduleTitle").value.trim(),
+      subject:$("newScheduleSubject").value,
+      day:$("newScheduleDay").value,
+      time:$("newScheduleTime").value
+    });
+    closeModal();renderSchedule();renderHome();toast("تمت إضافة الحصة إلى جدولك");
+  }
+  if(form.id==="profileForm"){
+    studentName=$("editName").value.trim();
+    studentGrade=$("editGrade").value;
+    $("welcomeName").textContent=studentName;
+    $("profileName").textContent=studentName;
+    $("profileAvatar").textContent=studentName.charAt(0);
+    $("profileGrade").textContent=studentGrade;
+    closeModal();updateSettings();toast("تم تحديث بياناتك");
+  }
+  if(form.id==="reportForm"){
+    const type=$("reportType").value;
+    const details=$("reportDetails").value.trim();
+    closeModal();
+    showModal(`<h3>تم تجهيز البلاغ ✓</h3><p style="line-height:2;color:var(--muted)">نوع المشكلة: ${escapeHTML(type)}<br>التفاصيل: ${escapeHTML(details)}</p><p class="subtitle">هذه نسخة تجريبية؛ لم يُرسل البلاغ إلى خادم أو فريق دعم.</p><div class="modal-actions"><button class="btn btn-primary" data-close-modal>حسنًا</button></div>`);
+  }
+});
+
+$("logoutButton").addEventListener("click",()=>{
+  showModal(`<h3>🚪 تسجيل الخروج</h3><p style="color:var(--muted)">هل أنت متأكد أنك تريد العودة إلى شاشة الدخول؟</p><div class="modal-actions"><button class="btn btn-danger" id="confirmLogout">نعم، تسجيل الخروج</button><button class="btn btn-outline" data-close-modal>إلغاء</button></div>`);
+});
+
+$("modalContent").addEventListener("click",e=>{
+  if(e.target.id==="confirmLogout"){
+    closeModal();
+    $("app").classList.add("hidden");
+    $("loginScreen").classList.remove("hidden");
+    $("studentName").value=studentName==="الطالب"?"":studentName;
+    toast("تم تسجيل الخروج من العرض التجريبي");
+  }
+});
+
+renderSubjects("homeSubjects");
+renderSubjects("allSubjects");
+renderHome();
+</script>
+</body>
+</html>
